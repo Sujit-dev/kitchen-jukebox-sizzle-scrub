@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 type Mode = "cook" | "clean";
-type Provider = "youtube";
+type Provider = "spotify" | "youtube";
 type Track = {
   title: string;
   artist: string;
@@ -11,18 +11,19 @@ type Track = {
   color: string;
   length: string;
   provider: Provider;
+  spotifyId?: string;
   youtubeId?: string;
 };
 
 const playlists: Record<Mode, Track[]> = {
   cook: [
-    { title: "Ilahi", artist: "Arijit Singh · YJHD", genre: "Sunny Bollywood", color: "#ff0033", length: "3:48", provider: "youtube", youtubeId: "fdubeMFwuGs" },
-    { title: "Deewani Mastani", artist: "Shreya Ghoshal · Bajirao Mastani", genre: "Bollywood evening", color: "#ff0033", length: "5:39", provider: "youtube", youtubeId: "h6lHUn20J5g" },
+    { title: "Ilahi", artist: "Arijit Singh · YJHD", genre: "Sunny Bollywood", color: "#1db954", length: "3:48", provider: "spotify", spotifyId: "1qqgpDdC1tAIS6o2zh2ahI" },
+    { title: "Deewani Mastani", artist: "Shreya Ghoshal · Bajirao Mastani", genre: "Bollywood evening", color: "#1db954", length: "4:21", provider: "spotify", spotifyId: "2NtgobVtslTdz2SDsAOIAh" },
   ],
   clean: [
-    { title: "Kala Chashma", artist: "Amar Arshi, Badshah · Baar Baar Dekho", genre: "Bollywood power", color: "#ff0033", length: "3:07", provider: "youtube", youtubeId: "4WRJHbL4dAk" },
-    { title: "Badtameez Dil", artist: "Benny Dayal · YJHD", genre: "Bollywood dance", color: "#ff0033", length: "4:12", provider: "youtube", youtubeId: "N0uDmkTV08Y" },
-    { title: "Gallan Goodiyaan", artist: "Farhan Akhtar & team · DDD", genre: "Bollywood party", color: "#ff0033", length: "4:56", provider: "youtube", youtubeId: "jCEdTq3j-0U" },
+    { title: "Kala Chashma", artist: "Amar Arshi, Badshah · Baar Baar Dekho", genre: "Bollywood power", color: "#1db954", length: "3:07", provider: "spotify", spotifyId: "6mdLX10dvBb7rGYbMXpKzz" },
+    { title: "Badtameez Dil", artist: "Benny Dayal · YJHD", genre: "Bollywood dance", color: "#1db954", length: "4:12", provider: "spotify", spotifyId: "4eu27jAU2bbnyHUC3G75U8" },
+    { title: "Gallan Goodiyaan", artist: "Farhan Akhtar & team · DDD", genre: "Bollywood party", color: "#1db954", length: "4:56", provider: "spotify", spotifyId: "7hNYvX0qAKrxtVr1jGDmvR" },
   ],
 };
 
@@ -37,7 +38,6 @@ export default function Home() {
   const [mood, setMood] = useState(moods.cook[0]);
   const [timer, setTimer] = useState(15 * 60);
   const [timerRunning, setTimerRunning] = useState(false);
-  const [playbackNonce, setPlaybackNonce] = useState(0);
 
   const songs = playlists[mode];
   const song = songs[track];
@@ -56,12 +56,11 @@ export default function Home() {
     setMood(moods[mode][0]);
     setTimer(mode === "cook" ? 15 * 60 : 12 * 60);
     setTimerRunning(false);
-    setPlaybackNonce(0);
   }, [mode]);
 
   const queue = useMemo(() => songs.filter((_, index) => index !== track), [songs, track]);
 
-  const providerName = "YouTube";
+  const providerName = song.provider === "spotify" ? "Spotify" : "YouTube";
 
   return (
     <main className={`app ${mode}`}>
@@ -101,7 +100,7 @@ export default function Home() {
           <div className="record-stage cook-stage" aria-label={`Now playing ${song.title}`}>
             <div className="sun-glow" /><div className="steam steam-one">~</div><div className="steam steam-two">~</div>
             <div className="orbit orbit-one" /><div className="orbit orbit-two" />
-            <div className={`record ${playbackNonce ? "spinning" : ""}`} style={{ "--label": song.color } as React.CSSProperties}>
+            <div className="record spinning" style={{ "--label": song.color } as React.CSSProperties}>
               <div className="record-lines" /><div className="record-label"><span>{song.genre}</span><b>S/S</b></div>
             </div>
             <div className="now-card"><span>On the turntable</span><strong>{song.title}</strong><small>{song.artist}</small></div>
@@ -122,7 +121,11 @@ export default function Home() {
             <span className="mini-cover" style={{ background: song.color }}>♪</span>
             <div><small>{song.genre} mix</small><strong>{song.title}</strong><span>{song.artist}</span><b className={`source-badge ${song.provider}`}><i />{providerName}</b></div>
           </div>
-          <iframe key={`${mode}-${track}-${playbackNonce}`} className="main-stream-player youtube-player" src={`https://www.youtube-nocookie.com/embed/${song.youtubeId}?autoplay=${playbackNonce ? 1 : 0}&playsinline=1&rel=0`} title={`${song.title} YouTube music video`} allow="autoplay; encrypted-media; picture-in-picture" loading="lazy" allowFullScreen />
+          {song.provider === "spotify" ? (
+            <iframe className="main-stream-player" src={`https://open.spotify.com/embed/track/${song.spotifyId}?utm_source=generator&theme=0`} title={`${song.title} Spotify music player`} allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" />
+          ) : (
+            <iframe className="main-stream-player youtube-player" src={`https://www.youtube-nocookie.com/embed/${song.youtubeId}?rel=0`} title={`${song.title} YouTube player`} allow="autoplay; encrypted-media; picture-in-picture" loading="lazy" />
+          )}
         </div>
 
         <div className="timer-panel">
@@ -140,11 +143,11 @@ export default function Home() {
         <div className="section-heading"><div><p className="eyebrow">Up next</p><h2>Keep the kitchen moving.</h2></div><span>{mood} mix · {songs.length} songs</span></div>
         <div className="queue-grid">
           {queue.map((item, index) => (
-            <button className="queue-card" key={item.title} onClick={() => { setTrack(songs.indexOf(item)); setPlaybackNonce((value) => value + 1); }}>
+            <button className="queue-card" key={item.title} onClick={() => setTrack(songs.indexOf(item))}>
               <span className="queue-number">0{index + 1}</span>
               <span className="queue-art" style={{ background: item.color }}><i>♪</i></span>
               <span className="queue-info"><strong>{item.title}</strong><small>{item.artist}</small></span>
-              <span className="queue-genre">{item.genre}<b className="source-badge youtube"><i />YouTube</b></span>
+              <span className="queue-genre">{item.genre}<b className={`source-badge ${item.provider}`}><i />{item.provider === "spotify" ? "Spotify" : "YouTube"}</b></span>
               <span className="queue-play">▶</span>
             </button>
           ))}
