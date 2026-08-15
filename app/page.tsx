@@ -91,19 +91,25 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="record-stage" aria-label={`Now playing ${song.title}`}>
-          <div className="orbit orbit-one" />
-          <div className="orbit orbit-two" />
-          <div className={`record ${playing ? "spinning" : ""}`} style={{ "--label": song.color } as React.CSSProperties}>
-            <div className="record-lines" />
-            <div className="record-label"><span>{song.genre}</span><b>S/S</b></div>
+        {mode === "cook" ? (
+          <div className="record-stage cook-stage" aria-label={`Now playing ${song.title}`}>
+            <div className="sun-glow" /><div className="steam steam-one">~</div><div className="steam steam-two">~</div>
+            <div className="orbit orbit-one" /><div className="orbit orbit-two" />
+            <div className={`record ${playing ? "spinning" : ""}`} style={{ "--label": song.color } as React.CSSProperties}>
+              <div className="record-lines" /><div className="record-label"><span>{song.genre}</span><b>S/S</b></div>
+            </div>
+            <div className="now-card"><span>On the turntable</span><strong>{song.title}</strong><small>{song.artist}</small></div>
           </div>
-          <div className="now-card">
-            <span>Now playing</span>
-            <strong>{song.title}</strong>
-            <small>{song.artist}</small>
+        ) : (
+          <div className="clean-stage" aria-label={`Now playing ${song.title}`}>
+            <div className="clean-badge">POWER<br/><b>12</b><small>MIN</small></div>
+            <div className={`equalizer ${playing ? "dancing" : ""}`} aria-hidden="true">
+              {[42, 76, 58, 92, 66, 38, 84, 54, 96, 62, 44, 78].map((height, index) => <i key={index} style={{ "--bar": `${height}%`, "--delay": `${index * -.08}s` } as React.CSSProperties} />)}
+            </div>
+            <div className="clean-now"><span>Now blasting · {song.genre}</span><strong>{song.title}</strong><small>{song.artist}</small><div className="clean-progress"><i /></div></div>
+            <div className="clean-steps"><span className="done">✓ Clear the counter</span><span>02 Rinse the plates</span><span>03 Victory dance</span></div>
           </div>
-        </div>
+        )}
       </section>
 
       <section className="control-deck">
