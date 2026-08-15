@@ -3,41 +3,46 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type Mode = "cook" | "clean";
+type Provider = "soundhelix" | "spotify" | "youtube";
+type Track = {
+  title: string;
+  artist: string;
+  genre: string;
+  color: string;
+  length: string;
+  provider: Provider;
+  src?: string;
+  spotifyId?: string;
+  youtubeId?: string;
+};
 
-const playlists = {
+const playlists: Record<Mode, Track[]> = {
   cook: [
-    { title: "Morning Chai", artist: "Kitchen Jukebox Radio", genre: "Lo-fi morning", color: "#e86435", length: "6:12", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-    { title: "Sunday Simmer", artist: "Kitchen Jukebox Radio", genre: "Acoustic", color: "#cc8d36", length: "6:05", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
-    { title: "Café by the Window", artist: "Kitchen Jukebox Radio", genre: "Soft jazz", color: "#60795f", length: "5:31", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
-    { title: "Masala Evening", artist: "Kitchen Jukebox Radio", genre: "Indian instrumental", color: "#8f693f", length: "5:44", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3" },
-    { title: "Saffron Sunset", artist: "Kitchen Jukebox Radio", genre: "Sufi mood", color: "#b56a55", length: "5:52", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3" },
-    { title: "Old Radio Romance", artist: "Kitchen Jukebox Radio", genre: "Retro mellow", color: "#7b5846", length: "6:18", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3" },
+    { title: "Morning Chai", artist: "Kitchen Jukebox Radio", genre: "Lo-fi morning", color: "#e86435", length: "6:12", provider: "soundhelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+    { title: "Ilahi", artist: "Arijit Singh · YJHD", genre: "Sunny Bollywood", color: "#1db954", length: "3:48", provider: "spotify", spotifyId: "1qqgpDdC1tAIS6o2zh2ahI" },
+    { title: "Sunday Simmer", artist: "Kitchen Jukebox Radio", genre: "Acoustic", color: "#cc8d36", length: "6:05", provider: "soundhelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+    { title: "Deewani Mastani", artist: "Shreya Ghoshal · Bajirao Mastani", genre: "Bollywood evening", color: "#1db954", length: "4:21", provider: "spotify", spotifyId: "2NtgobVtslTdz2SDsAOIAh" },
+    { title: "Café by the Window", artist: "Kitchen Jukebox Radio", genre: "Soft jazz", color: "#60795f", length: "5:31", provider: "soundhelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+    { title: "Masala Evening", artist: "Kitchen Jukebox Radio", genre: "Indian instrumental", color: "#8f693f", length: "5:44", provider: "soundhelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3" },
+    { title: "Saffron Sunset", artist: "Kitchen Jukebox Radio", genre: "Sufi mood", color: "#b56a55", length: "5:52", provider: "soundhelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3" },
+    { title: "Old Radio Romance", artist: "Kitchen Jukebox Radio", genre: "Retro mellow", color: "#7b5846", length: "6:18", provider: "soundhelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3" },
   ],
   clean: [
-    { title: "Scrub It Up", artist: "Kitchen Jukebox Radio", genre: "Dance warm-up", color: "#2764c9", length: "6:13", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-    { title: "Sink Disco", artist: "Kitchen Jukebox Radio", genre: "Electro pop", color: "#8e57c7", length: "5:48", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
-    { title: "Punjabi Power", artist: "Kitchen Jukebox Radio", genre: "Desi dance", color: "#ff6847", length: "5:26", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" },
-    { title: "Bollywood Blast", artist: "Kitchen Jukebox Radio", genre: "Bollywood energy", color: "#e33d72", length: "5:17", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3" },
-    { title: "Rock & Rinse", artist: "Kitchen Jukebox Radio", genre: "Rock", color: "#1e7991", length: "6:02", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" },
-    { title: "Final Plate Drop", artist: "Kitchen Jukebox Radio", genre: "EDM finale", color: "#f09d35", length: "5:39", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+    { title: "Scrub It Up", artist: "Kitchen Jukebox Radio", genre: "Dance warm-up", color: "#2764c9", length: "6:13", provider: "soundhelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+    { title: "Kala Chashma", artist: "Amar Arshi, Badshah · Baar Baar Dekho", genre: "Bollywood power", color: "#1db954", length: "3:07", provider: "spotify", spotifyId: "6mdLX10dvBb7rGYbMXpKzz" },
+    { title: "Sink Disco", artist: "Kitchen Jukebox Radio", genre: "Electro pop", color: "#8e57c7", length: "5:48", provider: "soundhelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+    { title: "Badtameez Dil", artist: "Benny Dayal · YJHD", genre: "Bollywood dance", color: "#1db954", length: "4:12", provider: "spotify", spotifyId: "4eu27jAU2bbnyHUC3G75U8" },
+    { title: "Punjabi Power", artist: "Kitchen Jukebox Radio", genre: "Desi dance", color: "#ff6847", length: "5:26", provider: "soundhelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" },
+    { title: "Gallan Goodiyaan", artist: "Farhan Akhtar & team · DDD", genre: "Bollywood party", color: "#1db954", length: "4:56", provider: "spotify", spotifyId: "7hNYvX0qAKrxtVr1jGDmvR" },
+    { title: "Bollywood Blast", artist: "Kitchen Jukebox Radio", genre: "Bollywood energy", color: "#e33d72", length: "5:17", provider: "soundhelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3" },
+    { title: "Rock & Rinse", artist: "Kitchen Jukebox Radio", genre: "Rock", color: "#1e7991", length: "6:02", provider: "soundhelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" },
+    { title: "Final Plate Drop", artist: "Kitchen Jukebox Radio", genre: "EDM finale", color: "#f09d35", length: "5:39", provider: "soundhelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
   ],
 };
 
 const moods = {
   cook: ["Easy does it", "Sunny", "Date night", "Family time"],
   clean: ["Quick blast", "Full power", "Dance break", "Retro"],
-};
-
-const bollywoodPicks = {
-  cook: [
-    { title: "Ilahi", artist: "Arijit Singh · YJHD", vibe: "Sunny cooking", spotifyId: "1qqgpDdC1tAIS6o2zh2ahI" },
-    { title: "Deewani Mastani", artist: "Shreya Ghoshal · Bajirao Mastani", vibe: "Slow evening", spotifyId: "2NtgobVtslTdz2SDsAOIAh" },
-  ],
-  clean: [
-    { title: "Kala Chashma", artist: "Amar Arshi, Badshah · Baar Baar Dekho", vibe: "Power start", spotifyId: "6mdLX10dvBb7rGYbMXpKzz" },
-    { title: "Badtameez Dil", artist: "Benny Dayal · YJHD", vibe: "Dance break", spotifyId: "4eu27jAU2bbnyHUC3G75U8" },
-    { title: "Gallan Goodiyaan", artist: "Farhan Akhtar & team · DDD", vibe: "Final sprint", spotifyId: "7hNYvX0qAKrxtVr1jGDmvR" },
-  ],
 };
 
 export default function Home() {
@@ -49,7 +54,6 @@ export default function Home() {
   const [mood, setMood] = useState(moods.cook[0]);
   const [timer, setTimer] = useState(15 * 60);
   const [timerRunning, setTimerRunning] = useState(false);
-  const [bollywoodTrack, setBollywoodTrack] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const songs = playlists[mode];
@@ -69,15 +73,18 @@ export default function Home() {
     setMood(moods[mode][0]);
     setTimer(mode === "cook" ? 15 * 60 : 12 * 60);
     setTimerRunning(false);
-    setBollywoodTrack(0);
   }, [mode]);
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
+    if (song.provider !== "soundhelix") {
+      audio.pause();
+      return;
+    }
     if (playing) audio.play().catch(() => setPlaying(false));
     else audio.pause();
-  }, [playing, track, mode]);
+  }, [playing, track, mode, song.provider]);
 
   const queue = useMemo(() => songs.filter((_, index) => index !== track), [songs, track]);
 
@@ -87,10 +94,11 @@ export default function Home() {
   }
 
   const clock = (value: number) => `${Math.floor(value / 60)}:${Math.floor(value % 60).toString().padStart(2, "0")}`;
+  const providerName = song.provider === "spotify" ? "Spotify" : song.provider === "youtube" ? "YouTube" : "SoundHelix";
 
   return (
     <main className={`app ${mode}`}>
-      <audio ref={audioRef} src={song.src} onTimeUpdate={(event) => setElapsed(event.currentTarget.currentTime)} onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)} onEnded={() => next(1)} preload="metadata" />
+      <audio ref={audioRef} src={song.src ?? ""} onTimeUpdate={(event) => setElapsed(event.currentTarget.currentTime)} onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)} onEnded={() => next(1)} preload="metadata" />
       <header className="topbar">
         <a className="brand" href="#top" aria-label="Sizzle and Scrub home">
           <span className="brand-mark">S/S</span>
@@ -146,16 +154,22 @@ export default function Home() {
         <div className="player-panel">
           <div className="track-meta">
             <span className="mini-cover" style={{ background: song.color }}>♪</span>
-            <div><small>{song.genre} mix</small><strong>{song.title}</strong><span>{song.artist}</span></div>
+            <div><small>{song.genre} mix</small><strong>{song.title}</strong><span>{song.artist}</span><b className={`source-badge ${song.provider}`}><i />{providerName}</b></div>
           </div>
-          <div className="transport">
-            <button onClick={() => next(-1)} aria-label="Previous song">↶</button>
-            <button className="play" onClick={() => setPlaying(!playing)} aria-label={playing ? "Pause" : "Play"}>{playing ? "Ⅱ" : "▶"}</button>
-            <button onClick={() => next(1)} aria-label="Next song">↷</button>
-          </div>
-          <div className="progress-wrap">
-            <span>{clock(elapsed)}</span><div className="progress"><i style={{ width: duration ? `${(elapsed / duration) * 100}%` : "0%" }} /></div><span>{duration ? clock(duration) : song.length}</span>
-          </div>
+          {song.provider === "soundhelix" ? <>
+            <div className="transport">
+              <button onClick={() => next(-1)} aria-label="Previous song">↶</button>
+              <button className="play" onClick={() => setPlaying(!playing)} aria-label={playing ? "Pause" : "Play"}>{playing ? "Ⅱ" : "▶"}</button>
+              <button onClick={() => next(1)} aria-label="Next song">↷</button>
+            </div>
+            <div className="progress-wrap">
+              <span>{clock(elapsed)}</span><div className="progress"><i style={{ width: duration ? `${(elapsed / duration) * 100}%` : "0%" }} /></div><span>{duration ? clock(duration) : song.length}</span>
+            </div>
+          </> : song.provider === "spotify" ? (
+            <iframe className="main-stream-player" src={`https://open.spotify.com/embed/track/${song.spotifyId}?utm_source=generator&theme=0`} title={`${song.title} Spotify music player`} allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" />
+          ) : (
+            <iframe className="main-stream-player youtube-player" src={`https://www.youtube-nocookie.com/embed/${song.youtubeId}?rel=0`} title={`${song.title} YouTube player`} allow="autoplay; encrypted-media; picture-in-picture" loading="lazy" />
+          )}
         </div>
 
         <div className="timer-panel">
@@ -169,30 +183,15 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bollywood-section" aria-labelledby="bollywood-title">
-        <div className="bollywood-heading"><div><p className="eyebrow">Hindi favourites</p><h2 id="bollywood-title">Bollywood picks</h2></div><span>Listen here with the Spotify music player</span></div>
-        <div className="bollywood-grid">
-          {bollywoodPicks[mode].map((pick, index) => (
-            <button onClick={() => { setBollywoodTrack(index); setPlaying(false); }} className={`bollywood-card ${bollywoodTrack === index ? "current" : ""}`} key={pick.title}>
-              <span>0{index + 1}</span><small>{pick.vibe}</small><strong>{pick.title}</strong><em>{pick.artist}</em><b>{bollywoodTrack === index ? "Selected" : "Play here"} ▶</b>
-            </button>
-          ))}
-        </div>
-        <div className="bollywood-player">
-          <iframe src={`https://open.spotify.com/embed/track/${bollywoodPicks[mode][bollywoodTrack].spotifyId}?utm_source=generator&theme=0`} title={`${bollywoodPicks[mode][bollywoodTrack].title} Spotify music player`} allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" />
-          <div><small>Now selected</small><strong>{bollywoodPicks[mode][bollywoodTrack].title}</strong><span>{bollywoodPicks[mode][bollywoodTrack].artist}</span></div>
-        </div>
-      </section>
-
       <section className="queue-section">
         <div className="section-heading"><div><p className="eyebrow">Up next</p><h2>Keep the kitchen moving.</h2></div><span>{mood} mix · {songs.length} songs</span></div>
         <div className="queue-grid">
           {queue.map((item, index) => (
-            <button className="queue-card" key={item.title} onClick={() => { setTrack(songs.indexOf(item)); setPlaying(true); }}>
+            <button className="queue-card" key={item.title} onClick={() => { setTrack(songs.indexOf(item)); setPlaying(item.provider === "soundhelix"); }}>
               <span className="queue-number">0{index + 1}</span>
               <span className="queue-art" style={{ background: item.color }}><i>♪</i></span>
               <span className="queue-info"><strong>{item.title}</strong><small>{item.artist}</small></span>
-              <span className="queue-genre">{item.genre}</span>
+              <span className="queue-genre">{item.genre}<b className={`source-badge ${item.provider}`}><i />{item.provider === "spotify" ? "Spotify" : item.provider === "youtube" ? "YouTube" : "Audio"}</b></span>
               <span className="queue-play">▶</span>
             </button>
           ))}
