@@ -1,14 +1,14 @@
 # Kitchen Jukebox — Sizzle & Scrub
 
 A responsive kitchen music experience with different moods for cooking and
-cleaning. It uses Spotify and YouTube embeds in one source-aware player, with no
-separate MP3 or audio-file player.
+cleaning. It uses official YouTube music-video embeds in one player, with no
+Spotify, MP3, or separate audio-file player.
 
 ## Features
 
 - Separate Cook and Clean modes
 - One unified music queue and player
-- Spotify and YouTube source badges
+- YouTube source badges
 - Cooking timer and cleaning power-session timer
 - Responsive kitchen-themed artwork and layouts
 
