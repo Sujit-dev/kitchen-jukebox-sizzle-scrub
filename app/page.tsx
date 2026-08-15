@@ -30,16 +30,13 @@ const moods = {
 
 const bollywoodPicks = {
   cook: [
-    { title: "Iktara", artist: "Kavita Seth · Wake Up Sid", vibe: "Slow prep", url: "https://www.youtube.com/results?search_query=Iktara+official+song+Wake+Up+Sid" },
-    { title: "Ilahi", artist: "Arijit Singh · YJHD", vibe: "Sunny cooking", url: "https://music.youtube.com/watch?v=fdubeMFwuGs" },
-    { title: "Khaabon Ke Parinday", artist: "Alyssa Mendonsa · ZNMD", vibe: "Easy evening", url: "https://www.youtube.com/results?search_query=Khaabon+Ke+Parinday+official+song" },
-    { title: "Aaj Kal Zindagi", artist: "Shankar Mahadevan · Wake Up Sid", vibe: "Feel good", url: "https://www.youtube.com/results?search_query=Aaj+Kal+Zindagi+official+song" },
+    { title: "Ilahi", artist: "Arijit Singh · YJHD", vibe: "Sunny cooking", youtubeId: "fdubeMFwuGs" },
+    { title: "Deewani Mastani", artist: "Shreya Ghoshal · Bajirao Mastani", vibe: "Slow evening", youtubeId: "h6lHUn20J5g" },
   ],
   clean: [
-    { title: "Kala Chashma", artist: "Amar Arshi, Badshah · Baar Baar Dekho", vibe: "Power start", url: "https://www.youtube.com/results?search_query=Kala+Chashma+official+song" },
-    { title: "Badtameez Dil", artist: "Benny Dayal · YJHD", vibe: "Dance break", url: "https://www.youtube.com/watch?v=N0uDmkTV08Y" },
-    { title: "London Thumakda", artist: "Labh Janjua · Queen", vibe: "Full energy", url: "https://www.youtube.com/results?search_query=London+Thumakda+official+song" },
-    { title: "Gallan Goodiyaan", artist: "Farhan Akhtar & team · DDD", vibe: "Final sprint", url: "https://www.youtube.com/results?search_query=Gallan+Goodiyaan+official+song" },
+    { title: "Kala Chashma", artist: "Amar Arshi, Badshah · Baar Baar Dekho", vibe: "Power start", youtubeId: "4WRJHbL4dAk" },
+    { title: "Badtameez Dil", artist: "Benny Dayal · YJHD", vibe: "Dance break", youtubeId: "N0uDmkTV08Y" },
+    { title: "Gallan Goodiyaan", artist: "Farhan Akhtar & team · DDD", vibe: "Final sprint", youtubeId: "jCEdTq3j-0U" },
   ],
 };
 
@@ -52,6 +49,7 @@ export default function Home() {
   const [mood, setMood] = useState(moods.cook[0]);
   const [timer, setTimer] = useState(15 * 60);
   const [timerRunning, setTimerRunning] = useState(false);
+  const [bollywoodTrack, setBollywoodTrack] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const songs = playlists[mode];
@@ -71,6 +69,7 @@ export default function Home() {
     setMood(moods[mode][0]);
     setTimer(mode === "cook" ? 15 * 60 : 12 * 60);
     setTimerRunning(false);
+    setBollywoodTrack(0);
   }, [mode]);
 
   useEffect(() => {
@@ -171,13 +170,17 @@ export default function Home() {
       </section>
 
       <section className="bollywood-section" aria-labelledby="bollywood-title">
-        <div className="bollywood-heading"><div><p className="eyebrow">Hindi favourites</p><h2 id="bollywood-title">Bollywood picks</h2></div><span>Opens official streaming ↗</span></div>
+        <div className="bollywood-heading"><div><p className="eyebrow">Hindi favourites</p><h2 id="bollywood-title">Bollywood picks</h2></div><span>Plays here via official YouTube videos</span></div>
         <div className="bollywood-grid">
           {bollywoodPicks[mode].map((pick, index) => (
-            <a href={pick.url} target="_blank" rel="noreferrer" className="bollywood-card" key={pick.title}>
-              <span>0{index + 1}</span><small>{pick.vibe}</small><strong>{pick.title}</strong><em>{pick.artist}</em><b>Listen ↗</b>
-            </a>
+            <button onClick={() => { setBollywoodTrack(index); setPlaying(false); }} className={`bollywood-card ${bollywoodTrack === index ? "current" : ""}`} key={pick.title}>
+              <span>0{index + 1}</span><small>{pick.vibe}</small><strong>{pick.title}</strong><em>{pick.artist}</em><b>{bollywoodTrack === index ? "Selected" : "Play here"} ▶</b>
+            </button>
           ))}
+        </div>
+        <div className="bollywood-player">
+          <iframe src={`https://www.youtube-nocookie.com/embed/${bollywoodPicks[mode][bollywoodTrack].youtubeId}?rel=0`} title={`${bollywoodPicks[mode][bollywoodTrack].title} official video player`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+          <div><small>Now selected</small><strong>{bollywoodPicks[mode][bollywoodTrack].title}</strong><span>{bollywoodPicks[mode][bollywoodTrack].artist}</span></div>
         </div>
       </section>
 
