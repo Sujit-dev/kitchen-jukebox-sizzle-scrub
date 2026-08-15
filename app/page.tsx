@@ -1,21 +1,21 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type Mode = "cook" | "clean";
 
 const playlists = {
   cook: [
-    { title: "Golden Hour Chai", artist: "The Pantry Players", genre: "Lo-fi", color: "#e86435", length: "3:42" },
-    { title: "Slow Simmer", artist: "Sunday Service", genre: "Jazz", color: "#cc8d36", length: "4:08" },
-    { title: "Nimbooda Nights", artist: "Masala Radio", genre: "Bollywood", color: "#8f693f", length: "3:26" },
-    { title: "Rosemary Skies", artist: "June & The Spoons", genre: "Acoustic", color: "#60795f", length: "4:14" },
+    { title: "Sunlit Pantry", artist: "SoundHelix", genre: "Easy listening", color: "#e86435", length: "6:12", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+    { title: "Slow Simmer", artist: "SoundHelix", genre: "Jazz groove", color: "#cc8d36", length: "5:31", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+    { title: "Masala Evening", artist: "SoundHelix", genre: "World instrumental", color: "#8f693f", length: "5:44", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3" },
+    { title: "Rosemary Skies", artist: "SoundHelix", genre: "Acoustic mood", color: "#60795f", length: "6:05", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
   ],
   clean: [
-    { title: "Scrub It Up", artist: "Neon Apron", genre: "Dance", color: "#4f5dff", length: "3:18" },
-    { title: "Sink Disco", artist: "Bubble Club", genre: "Pop", color: "#9b4dca", length: "2:54" },
-    { title: "Jhaadu Bounce", artist: "Bass Tadka", genre: "Punjabi", color: "#da3c70", length: "3:34" },
-    { title: "Last Plate Standing", artist: "The Rinse Cycle", genre: "Rock", color: "#236f91", length: "4:01" },
+    { title: "Scrub It Up", artist: "SoundHelix", genre: "Dance", color: "#4f5dff", length: "6:13", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+    { title: "Sink Disco", artist: "SoundHelix", genre: "Electro pop", color: "#9b4dca", length: "5:48", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+    { title: "Jhaadu Bounce", artist: "SoundHelix", genre: "Desi energy", color: "#da3c70", length: "5:26", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" },
+    { title: "Last Plate Standing", artist: "SoundHelix", genre: "Rock", color: "#236f91", length: "6:02", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" },
   ],
 };
 
@@ -27,10 +27,13 @@ const moods = {
 export default function Home() {
   const [mode, setMode] = useState<Mode>("cook");
   const [track, setTrack] = useState(0);
-  const [playing, setPlaying] = useState(true);
+  const [playing, setPlaying] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [mood, setMood] = useState(moods.cook[0]);
   const [timer, setTimer] = useState(15 * 60);
   const [timerRunning, setTimerRunning] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const songs = playlists[mode];
   const song = songs[track];
@@ -51,14 +54,25 @@ export default function Home() {
     setTimerRunning(false);
   }, [mode]);
 
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (playing) audio.play().catch(() => setPlaying(false));
+    else audio.pause();
+  }, [playing, track, mode]);
+
   const queue = useMemo(() => songs.filter((_, index) => index !== track), [songs, track]);
 
   function next(direction = 1) {
     setTrack((current) => (current + direction + songs.length) % songs.length);
+    setElapsed(0);
   }
+
+  const clock = (value: number) => `${Math.floor(value / 60)}:${Math.floor(value % 60).toString().padStart(2, "0")}`;
 
   return (
     <main className={`app ${mode}`}>
+      <audio ref={audioRef} src={song.src} onTimeUpdate={(event) => setElapsed(event.currentTarget.currentTime)} onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)} onEnded={() => next(1)} preload="metadata" />
       <header className="topbar">
         <a className="brand" href="#top" aria-label="Sizzle and Scrub home">
           <span className="brand-mark">S/S</span>
@@ -102,10 +116,8 @@ export default function Home() {
           </div>
         ) : (
           <div className="clean-stage" aria-label={`Now playing ${song.title}`}>
-            <div className="clean-badge">POWER<br/><b>12</b><small>MIN</small></div>
-            <div className={`equalizer ${playing ? "dancing" : ""}`} aria-hidden="true">
-              {[42, 76, 58, 92, 66, 38, 84, 54, 96, 62, 44, 78].map((height, index) => <i key={index} style={{ "--bar": `${height}%`, "--delay": `${index * -.08}s` } as React.CSSProperties} />)}
-            </div>
+            <div className="clean-photo" />
+            <div className="clean-badge">PLAY<br/><b>LOUD</b><small>CLEAN FAST</small></div>
             <div className="clean-now"><span>Now blasting · {song.genre}</span><strong>{song.title}</strong><small>{song.artist}</small><div className="clean-progress"><i /></div></div>
             <div className="clean-steps"><span className="done">✓ Clear the counter</span><span>02 Rinse the plates</span><span>03 Victory dance</span></div>
           </div>
@@ -124,7 +136,7 @@ export default function Home() {
             <button onClick={() => next(1)} aria-label="Next song">↷</button>
           </div>
           <div className="progress-wrap">
-            <span>1:18</span><div className="progress"><i /></div><span>{song.length}</span>
+            <span>{clock(elapsed)}</span><div className="progress"><i style={{ width: duration ? `${(elapsed / duration) * 100}%` : "0%" }} /></div><span>{duration ? clock(duration) : song.length}</span>
           </div>
         </div>
 
