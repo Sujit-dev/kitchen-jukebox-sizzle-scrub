@@ -30,13 +30,13 @@ const moods = {
 
 const bollywoodPicks = {
   cook: [
-    { title: "Ilahi", artist: "Arijit Singh · YJHD", vibe: "Sunny cooking", youtubeId: "fdubeMFwuGs" },
-    { title: "Deewani Mastani", artist: "Shreya Ghoshal · Bajirao Mastani", vibe: "Slow evening", youtubeId: "h6lHUn20J5g" },
+    { title: "Ilahi", artist: "Arijit Singh · YJHD", vibe: "Sunny cooking", spotifyId: "1qqgpDdC1tAIS6o2zh2ahI" },
+    { title: "Deewani Mastani", artist: "Shreya Ghoshal · Bajirao Mastani", vibe: "Slow evening", spotifyId: "2NtgobVtslTdz2SDsAOIAh" },
   ],
   clean: [
-    { title: "Kala Chashma", artist: "Amar Arshi, Badshah · Baar Baar Dekho", vibe: "Power start", youtubeId: "4WRJHbL4dAk" },
-    { title: "Badtameez Dil", artist: "Benny Dayal · YJHD", vibe: "Dance break", youtubeId: "N0uDmkTV08Y" },
-    { title: "Gallan Goodiyaan", artist: "Farhan Akhtar & team · DDD", vibe: "Final sprint", youtubeId: "jCEdTq3j-0U" },
+    { title: "Kala Chashma", artist: "Amar Arshi, Badshah · Baar Baar Dekho", vibe: "Power start", spotifyId: "6mdLX10dvBb7rGYbMXpKzz" },
+    { title: "Badtameez Dil", artist: "Benny Dayal · YJHD", vibe: "Dance break", spotifyId: "4eu27jAU2bbnyHUC3G75U8" },
+    { title: "Gallan Goodiyaan", artist: "Farhan Akhtar & team · DDD", vibe: "Final sprint", spotifyId: "7hNYvX0qAKrxtVr1jGDmvR" },
   ],
 };
 
@@ -170,7 +170,7 @@ export default function Home() {
       </section>
 
       <section className="bollywood-section" aria-labelledby="bollywood-title">
-        <div className="bollywood-heading"><div><p className="eyebrow">Hindi favourites</p><h2 id="bollywood-title">Bollywood picks</h2></div><span>Plays here via official YouTube videos</span></div>
+        <div className="bollywood-heading"><div><p className="eyebrow">Hindi favourites</p><h2 id="bollywood-title">Bollywood picks</h2></div><span>Listen here with the Spotify music player</span></div>
         <div className="bollywood-grid">
           {bollywoodPicks[mode].map((pick, index) => (
             <button onClick={() => { setBollywoodTrack(index); setPlaying(false); }} className={`bollywood-card ${bollywoodTrack === index ? "current" : ""}`} key={pick.title}>
@@ -179,7 +179,7 @@ export default function Home() {
           ))}
         </div>
         <div className="bollywood-player">
-          <iframe src={`https://www.youtube-nocookie.com/embed/${bollywoodPicks[mode][bollywoodTrack].youtubeId}?rel=0`} title={`${bollywoodPicks[mode][bollywoodTrack].title} official video player`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+          <iframe src={`https://open.spotify.com/embed/track/${bollywoodPicks[mode][bollywoodTrack].spotifyId}?utm_source=generator&theme=0`} title={`${bollywoodPicks[mode][bollywoodTrack].title} Spotify music player`} allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" />
           <div><small>Now selected</small><strong>{bollywoodPicks[mode][bollywoodTrack].title}</strong><span>{bollywoodPicks[mode][bollywoodTrack].artist}</span></div>
         </div>
       </section>

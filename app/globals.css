@@ -73,8 +73,8 @@ footer { border-top: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); 
 .bollywood-card{min-height:190px;text-align:left;cursor:pointer}
 .bollywood-card:hover,.bollywood-card.current{transform:translateY(-5px);box-shadow:0 12px 0 var(--accent)}
 .clean .bollywood-card:hover,.clean .bollywood-card.current{box-shadow:0 12px 0 #2764c9}
-.bollywood-player{margin-top:28px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(220px,.7fr);background:#171410;color:#fff;border:8px solid #171410}
-.bollywood-player iframe{width:100%;aspect-ratio:16/9;border:0;display:block}
+.bollywood-player{margin-top:28px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(220px,.7fr);align-items:center;background:#171410;color:#fff;border:8px solid #171410}
+.bollywood-player iframe{width:100%;height:152px;border:0;display:block;border-radius:12px}
 .bollywood-player>div{padding:28px;display:flex;flex-direction:column;justify-content:center}
 .bollywood-player small{font-size:9px;text-transform:uppercase;letter-spacing:.16em;color:var(--accent)}
 .bollywood-player strong{font:34px/1 Georgia,serif;margin:9px 0}.bollywood-player span{font-size:11px;opacity:.7}
