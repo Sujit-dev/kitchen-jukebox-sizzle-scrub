@@ -6,16 +6,20 @@ type Mode = "cook" | "clean";
 
 const playlists = {
   cook: [
-    { title: "Sunlit Pantry", artist: "SoundHelix", genre: "Easy listening", color: "#e86435", length: "6:12", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-    { title: "Slow Simmer", artist: "SoundHelix", genre: "Jazz groove", color: "#cc8d36", length: "5:31", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
-    { title: "Masala Evening", artist: "SoundHelix", genre: "World instrumental", color: "#8f693f", length: "5:44", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3" },
-    { title: "Rosemary Skies", artist: "SoundHelix", genre: "Acoustic mood", color: "#60795f", length: "6:05", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+    { title: "Morning Chai", artist: "Kitchen Jukebox Radio", genre: "Lo-fi morning", color: "#e86435", length: "6:12", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+    { title: "Sunday Simmer", artist: "Kitchen Jukebox Radio", genre: "Acoustic", color: "#cc8d36", length: "6:05", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+    { title: "Café by the Window", artist: "Kitchen Jukebox Radio", genre: "Soft jazz", color: "#60795f", length: "5:31", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+    { title: "Masala Evening", artist: "Kitchen Jukebox Radio", genre: "Indian instrumental", color: "#8f693f", length: "5:44", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3" },
+    { title: "Saffron Sunset", artist: "Kitchen Jukebox Radio", genre: "Sufi mood", color: "#b56a55", length: "5:52", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3" },
+    { title: "Old Radio Romance", artist: "Kitchen Jukebox Radio", genre: "Retro mellow", color: "#7b5846", length: "6:18", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3" },
   ],
   clean: [
-    { title: "Scrub It Up", artist: "SoundHelix", genre: "Dance", color: "#4f5dff", length: "6:13", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-    { title: "Sink Disco", artist: "SoundHelix", genre: "Electro pop", color: "#9b4dca", length: "5:48", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
-    { title: "Jhaadu Bounce", artist: "SoundHelix", genre: "Desi energy", color: "#da3c70", length: "5:26", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" },
-    { title: "Last Plate Standing", artist: "SoundHelix", genre: "Rock", color: "#236f91", length: "6:02", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" },
+    { title: "Scrub It Up", artist: "Kitchen Jukebox Radio", genre: "Dance warm-up", color: "#2764c9", length: "6:13", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+    { title: "Sink Disco", artist: "Kitchen Jukebox Radio", genre: "Electro pop", color: "#8e57c7", length: "5:48", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+    { title: "Punjabi Power", artist: "Kitchen Jukebox Radio", genre: "Desi dance", color: "#ff6847", length: "5:26", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" },
+    { title: "Bollywood Blast", artist: "Kitchen Jukebox Radio", genre: "Bollywood energy", color: "#e33d72", length: "5:17", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3" },
+    { title: "Rock & Rinse", artist: "Kitchen Jukebox Radio", genre: "Rock", color: "#1e7991", length: "6:02", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" },
+    { title: "Final Plate Drop", artist: "Kitchen Jukebox Radio", genre: "EDM finale", color: "#f09d35", length: "5:39", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
   ],
 };
 
