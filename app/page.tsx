@@ -28,6 +28,21 @@ const moods = {
   clean: ["Quick blast", "Full power", "Dance break", "Retro"],
 };
 
+const bollywoodPicks = {
+  cook: [
+    { title: "Iktara", artist: "Kavita Seth · Wake Up Sid", vibe: "Slow prep", url: "https://www.youtube.com/results?search_query=Iktara+official+song+Wake+Up+Sid" },
+    { title: "Ilahi", artist: "Arijit Singh · YJHD", vibe: "Sunny cooking", url: "https://music.youtube.com/watch?v=fdubeMFwuGs" },
+    { title: "Khaabon Ke Parinday", artist: "Alyssa Mendonsa · ZNMD", vibe: "Easy evening", url: "https://www.youtube.com/results?search_query=Khaabon+Ke+Parinday+official+song" },
+    { title: "Aaj Kal Zindagi", artist: "Shankar Mahadevan · Wake Up Sid", vibe: "Feel good", url: "https://www.youtube.com/results?search_query=Aaj+Kal+Zindagi+official+song" },
+  ],
+  clean: [
+    { title: "Kala Chashma", artist: "Amar Arshi, Badshah · Baar Baar Dekho", vibe: "Power start", url: "https://www.youtube.com/results?search_query=Kala+Chashma+official+song" },
+    { title: "Badtameez Dil", artist: "Benny Dayal · YJHD", vibe: "Dance break", url: "https://www.youtube.com/watch?v=N0uDmkTV08Y" },
+    { title: "London Thumakda", artist: "Labh Janjua · Queen", vibe: "Full energy", url: "https://www.youtube.com/results?search_query=London+Thumakda+official+song" },
+    { title: "Gallan Goodiyaan", artist: "Farhan Akhtar & team · DDD", vibe: "Final sprint", url: "https://www.youtube.com/results?search_query=Gallan+Goodiyaan+official+song" },
+  ],
+};
+
 export default function Home() {
   const [mode, setMode] = useState<Mode>("cook");
   const [track, setTrack] = useState(0);
@@ -152,6 +167,17 @@ export default function Home() {
             <button className="timer-start" onClick={() => setTimerRunning(!timerRunning)}>{timerRunning ? "Pause" : "Start"}</button>
             <button onClick={() => { setTimer(mode === "cook" ? 15 * 60 : 12 * 60); setTimerRunning(false); }}>Reset</button>
           </div>
+        </div>
+      </section>
+
+      <section className="bollywood-section" aria-labelledby="bollywood-title">
+        <div className="bollywood-heading"><div><p className="eyebrow">Hindi favourites</p><h2 id="bollywood-title">Bollywood picks</h2></div><span>Opens official streaming ↗</span></div>
+        <div className="bollywood-grid">
+          {bollywoodPicks[mode].map((pick, index) => (
+            <a href={pick.url} target="_blank" rel="noreferrer" className="bollywood-card" key={pick.title}>
+              <span>0{index + 1}</span><small>{pick.vibe}</small><strong>{pick.title}</strong><em>{pick.artist}</em><b>Listen ↗</b>
+            </a>
+          ))}
         </div>
       </section>
 
